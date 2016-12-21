@@ -13,7 +13,7 @@ namespace Clipboard.Business.Tests.ServiceTests
         [TestMethod]
         public void GetDataFromClipboard_ClipboardHasData_ShouldReturnDataOnClipboard()
         {
-            System.Windows.Clipboard.SetText("Test data getting set.");
+            SetText("Test data getting set.");
             Assert.AreEqual("Test data getting set.", _clipboardService.GetTextFromClipboard());
         }
 
@@ -21,15 +21,14 @@ namespace Clipboard.Business.Tests.ServiceTests
         public void AddTextToList_HaveTextFromClipboard_ShouldHaveNewItemInList()
         {
             var list = _clipboardService.ClipboardDirectory;
-            System.Windows.Clipboard.SetText("Adding item to dictionary.");
+            
+            SetText("Adding item to dictionary.");
             var firstCopy = _clipboardService.AddTextToList(_clipboardService.GetTextFromClipboard(), list);
-
             Assert.AreEqual(1, firstCopy.Count);
             Assert.AreEqual("Adding item to dictionary.", firstCopy.First());
 
-            System.Windows.Clipboard.SetText("Second item to dictionary.");
+            SetText("Second item to dictionary.");
             var secondCopy = _clipboardService.AddTextToList(_clipboardService.GetTextFromClipboard(), list);
-
             Assert.AreEqual(2, secondCopy.Count);
             Assert.AreEqual("Second item to dictionary.", secondCopy[1]);
         }
@@ -61,6 +60,11 @@ namespace Clipboard.Business.Tests.ServiceTests
         }
 
         // helpers
+        private static void SetText(string text)
+        {
+            System.Windows.Clipboard.SetText(text);
+        }
+
         private static void AddItemsToList(ICollection<string> list)
         {
             list.Add("first item");
