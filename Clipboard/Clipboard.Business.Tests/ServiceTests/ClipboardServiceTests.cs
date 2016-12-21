@@ -8,29 +8,27 @@ namespace Clipboard.Business.Tests.ServiceTests
     [TestClass]
     public class ClipboardServiceTests
     {
+        private readonly ClipboardService _clipboardService = new ClipboardService();
+        
         [TestMethod]
         public void GetDataFromClipboard_ClipboardHasData_ShouldReturnDataOnClipboard()
         {
             System.Windows.Clipboard.SetText("Test data getting set.");
-            var clipboardService = new ClipboardService();
-
-            Assert.AreEqual("Test data getting set.", clipboardService.GetTextFromClipboard());
+            Assert.AreEqual("Test data getting set.", _clipboardService.GetTextFromClipboard());
         }
 
         [TestMethod]
         public void AddTextToList_HaveTextFromClipboard_ShouldHaveNewItemInList()
         {
-            var clipboardService = new ClipboardService();
-            var list = clipboardService.ClipboardDirectory;
-
+            var list = _clipboardService.ClipboardDirectory;
             System.Windows.Clipboard.SetText("Adding item to dictionary.");
-            var firstCopy = clipboardService.AddTextToList(clipboardService.GetTextFromClipboard(), list);
+            var firstCopy = _clipboardService.AddTextToList(_clipboardService.GetTextFromClipboard(), list);
 
             Assert.AreEqual(1, firstCopy.Count);
             Assert.AreEqual("Adding item to dictionary.", firstCopy.First());
 
             System.Windows.Clipboard.SetText("Second item to dictionary.");
-            var secondCopy = clipboardService.AddTextToList(clipboardService.GetTextFromClipboard(), list);
+            var secondCopy = _clipboardService.AddTextToList(_clipboardService.GetTextFromClipboard(), list);
 
             Assert.AreEqual(2, secondCopy.Count);
             Assert.AreEqual("Second item to dictionary.", secondCopy[1]);
@@ -39,26 +37,25 @@ namespace Clipboard.Business.Tests.ServiceTests
         [TestMethod]
         public void SelectFromClipboard_HaveMultipleItemsInList_ShouldSetClipboardWithSelectedItem()
         {
-            var clipboardService = new ClipboardService();
-            var list = clipboardService.ClipboardDirectory;
+            var list = _clipboardService.ClipboardDirectory;
             AddItemsToList(list);
 
             Assert.AreEqual(3, list.Count, "PRE-CHECK: Verify 3 items are in dictionary.");
-            Assert.AreEqual("second item", clipboardService.SelectFromClipboard(1, list));
-            Assert.AreEqual("second item", clipboardService.GetTextFromClipboard());
+            Assert.AreEqual("second item", _clipboardService.SelectFromClipboard(1, list));
+            Assert.AreEqual("second item", _clipboardService.GetTextFromClipboard());
         }
 
         [TestMethod]
         public void OrderList_AfterSelectingFromList_ShouldHaveSelectedAsIndexOne()
         {
-            var clipboardService = new ClipboardService();
-            var list = clipboardService.ClipboardDirectory;
+            var list = _clipboardService.ClipboardDirectory;
             AddItemsToList(list);
 
             Assert.AreEqual(3, list.Count, "PRE-CHECK: Verify 3 items are in dictionary.");
-            clipboardService.SelectFromClipboard(2, list);
-            clipboardService.OrderList(1, list);
+            _clipboardService.SelectFromClipboard(2, list);
+            _clipboardService.OrderList(1, list);
             
+            Assert.AreEqual("third item", _clipboardService.GetTextFromClipboard(), "Verify selected item is added to clipboard.");
             Assert.AreEqual("second item", list[0]);
             Assert.AreEqual("first item", list[1]);
             Assert.AreEqual("third item", list[2]);
