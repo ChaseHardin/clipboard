@@ -4,24 +4,31 @@ namespace Clipboard.Business.Services
 {
     public class ClipboardService
     {
-        public Dictionary<int, string> ClipboardDirectory = new Dictionary<int, string>();
+        public List<string> ClipboardDirectory = new List<string>();
 
         public string GetTextFromClipboard()
         {
             return System.Windows.Clipboard.GetText();
         }
 
-        public Dictionary<int, string> AddTextToDictionary(string getTextFromClipboard, Dictionary<int, string> dictionary)
+        public List<string> AddTextToList(string getTextFromClipboard, List<string> list)
         {
-            dictionary.Add(dictionary.Count + 1, getTextFromClipboard);
-            return dictionary;
+            list.Add(getTextFromClipboard);
+            return list;
         }
 
-        public string SelectFromClipboard(int index, Dictionary<int, string> dictionary)
+        public string SelectFromClipboard(int index, List<string> list)
         {
-            var selected = dictionary[index];
+            var selected = list[index];
             System.Windows.Clipboard.SetText(selected);
             return selected;
+        }
+
+        public void OrderList(int selectedIndex, List<string> list)
+        {
+            var current = list[selectedIndex];
+            list.Remove(current);
+            list.Insert(0, current);
         }
     }
 }

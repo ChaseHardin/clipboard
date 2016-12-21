@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Clipboard.Business.Services;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -17,36 +18,58 @@ namespace Clipboard.Business.Tests.ServiceTests
         }
 
         [TestMethod]
-        public void AddTextToDictionary_HaveTextFromClipboard_ShouldHaveNewItemInDictionary()
+        public void AddTextToList_HaveTextFromClipboard_ShouldHaveNewItemInList()
         {
             var clipboardService = new ClipboardService();
-            var dictionary = clipboardService.ClipboardDirectory;
-            
+            var list = clipboardService.ClipboardDirectory;
+
             System.Windows.Clipboard.SetText("Adding item to dictionary.");
-            var firstCopy = clipboardService.AddTextToDictionary(clipboardService.GetTextFromClipboard(), dictionary);
-            
+            var firstCopy = clipboardService.AddTextToList(clipboardService.GetTextFromClipboard(), list);
+
             Assert.AreEqual(1, firstCopy.Count);
-            Assert.AreEqual("Adding item to dictionary.", firstCopy.First().Value);
-           
+            Assert.AreEqual("Adding item to dictionary.", firstCopy.First());
+
             System.Windows.Clipboard.SetText("Second item to dictionary.");
-            var secondCopy = clipboardService.AddTextToDictionary(clipboardService.GetTextFromClipboard(), dictionary);
+            var secondCopy = clipboardService.AddTextToList(clipboardService.GetTextFromClipboard(), list);
 
             Assert.AreEqual(2, secondCopy.Count);
-            Assert.AreEqual("Second item to dictionary.", secondCopy.First(x => x.Key == 2).Value);
+            Assert.AreEqual("Second item to dictionary.", secondCopy[1]);
         }
 
         [TestMethod]
-        public void SelectFromClipboard_HaveMultipleItemsInDictionary_ShouldSetClipboardWithSelectedItem()
+        public void SelectFromClipboard_HaveMultipleItemsInList_ShouldSetClipboardWithSelectedItem()
         {
             var clipboardService = new ClipboardService();
-            var dictionary = clipboardService.ClipboardDirectory;
-            dictionary.Add(1, "first item");
-            dictionary.Add(2, "second item");
-            dictionary.Add(3, "third item");
+            var list = clipboardService.ClipboardDirectory;
+            AddItemsToList(list);
 
-            Assert.AreEqual(3, dictionary.Count, "PRE-CHECK: Verify 3 items are in dictionary.");
-            Assert.AreEqual("second item",  clipboardService.SelectFromClipboard(2, dictionary));
+            Assert.AreEqual(3, list.Count, "PRE-CHECK: Verify 3 items are in dictionary.");
+            Assert.AreEqual("second item", clipboardService.SelectFromClipboard(1, list));
             Assert.AreEqual("second item", clipboardService.GetTextFromClipboard());
         }
+
+        [TestMethod]
+        public void OrderList_AfterSelectingFromList_ShouldHaveSelectedAsIndexOne()
+        {
+            var clipboardService = new ClipboardService();
+            var list = clipboardService.ClipboardDirectory;
+            AddItemsToList(list);
+
+            Assert.AreEqual(3, list.Count, "PRE-CHECK: Verify 3 items are in dictionary.");
+            clipboardService.SelectFromClipboard(2, list);
+            clipboardService.OrderList(1, list);
+            
+            Assert.AreEqual("second item", list[0]);
+            Assert.AreEqual("first item", list[1]);
+            Assert.AreEqual("third item", list[2]);
+        }
+
+        // helpers
+        private static void AddItemsToList(ICollection<string> list)
+        {
+            list.Add("first item");
+            list.Add("second item");
+            list.Add("third item");
+        }
     }
-} 
+}
