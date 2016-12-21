@@ -20,15 +20,13 @@ namespace Clipboard.Business.Tests.ServiceTests
         [TestMethod]
         public void AddTextToList_HaveTextFromClipboard_ShouldHaveNewItemInList()
         {
-            var list = _clipboardService.ClipboardDirectory;
-            
             SetText("Adding item to dictionary.");
-            var firstCopy = _clipboardService.AddTextToList(_clipboardService.GetTextFromClipboard(), list);
+            var firstCopy = _clipboardService.AddTextToList(_clipboardService.GetTextFromClipboard());
             Assert.AreEqual(1, firstCopy.Count);
             Assert.AreEqual("Adding item to dictionary.", firstCopy.First());
 
             SetText("Second item to dictionary.");
-            var secondCopy = _clipboardService.AddTextToList(_clipboardService.GetTextFromClipboard(), list);
+            var secondCopy = _clipboardService.AddTextToList(_clipboardService.GetTextFromClipboard());
             Assert.AreEqual(2, secondCopy.Count);
             Assert.AreEqual("Second item to dictionary.", secondCopy[1]);
         }
@@ -36,11 +34,9 @@ namespace Clipboard.Business.Tests.ServiceTests
         [TestMethod]
         public void SelectFromClipboard_HaveMultipleItemsInList_ShouldSetClipboardWithSelectedItem()
         {
-            var list = _clipboardService.ClipboardDirectory;
-            AddItemsToList(list);
-
-            Assert.AreEqual(3, list.Count, "PRE-CHECK: Verify 3 items are in dictionary.");
-            Assert.AreEqual("second item", _clipboardService.SelectFromClipboard(1, list));
+            AddItemsToList(_clipboardService.ClipboardDirectory);
+            Assert.AreEqual(3, _clipboardService.ClipboardDirectory.Count, "PRE-CHECK: Verify 3 items are in dictionary.");
+            Assert.AreEqual("second item", _clipboardService.SelectFromClipboard(1));
             Assert.AreEqual("second item", _clipboardService.GetTextFromClipboard());
         }
 
@@ -51,7 +47,7 @@ namespace Clipboard.Business.Tests.ServiceTests
             AddItemsToList(list);
 
             Assert.AreEqual(3, list.Count, "PRE-CHECK: Verify 3 items are in dictionary.");
-            _clipboardService.SelectFromClipboard(2, list);
+            _clipboardService.SelectFromClipboard(2);
             
             Assert.AreEqual("third item", _clipboardService.GetTextFromClipboard(), "Verify selected item is added to clipboard.");
             Assert.AreEqual("third item", list[0]);

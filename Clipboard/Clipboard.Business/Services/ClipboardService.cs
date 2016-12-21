@@ -11,25 +11,25 @@ namespace Clipboard.Business.Services
             return System.Windows.Clipboard.GetText();
         }
 
-        public List<string> AddTextToList(string getTextFromClipboard, List<string> list)
+        public List<string> AddTextToList(string getTextFromClipboard)
         {
-            list.Add(getTextFromClipboard);
-            return list;
+            ClipboardDirectory.Add(getTextFromClipboard);
+            return ClipboardDirectory;
         }
 
-        public string SelectFromClipboard(int index, List<string> list)
+        public string SelectFromClipboard(int index)
         {
-            var selected = list[index];
+            var selected = ClipboardDirectory[index];
             System.Windows.Clipboard.SetText(selected);
-            OrderList(index, list);
+            OrderList(index);
             return selected;
         }
 
-        private static void OrderList(int selectedIndex, IList<string> list)
+        private void OrderList(int selectedIndex)
         {
-            var current = list[selectedIndex];
-            list.Remove(current);
-            list.Insert(0, current);
+            var current = ClipboardDirectory[selectedIndex];
+            ClipboardDirectory.Remove(current);
+            ClipboardDirectory.Insert(0, current);
         }
     }
 }
