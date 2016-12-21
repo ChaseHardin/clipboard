@@ -21,10 +21,11 @@ namespace Clipboard.Business.Services
         {
             var selected = list[index];
             System.Windows.Clipboard.SetText(selected);
+            OrderList(index, list);
             return selected;
         }
 
-        public void OrderList(int selectedIndex, List<string> list)
+        private static void OrderList(int selectedIndex, IList<string> list)
         {
             var current = list[selectedIndex];
             list.Remove(current);

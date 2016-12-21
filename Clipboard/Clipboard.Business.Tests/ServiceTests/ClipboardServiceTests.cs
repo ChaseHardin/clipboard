@@ -53,12 +53,11 @@ namespace Clipboard.Business.Tests.ServiceTests
 
             Assert.AreEqual(3, list.Count, "PRE-CHECK: Verify 3 items are in dictionary.");
             _clipboardService.SelectFromClipboard(2, list);
-            _clipboardService.OrderList(1, list);
             
             Assert.AreEqual("third item", _clipboardService.GetTextFromClipboard(), "Verify selected item is added to clipboard.");
-            Assert.AreEqual("second item", list[0]);
+            Assert.AreEqual("third item", list[0]);
             Assert.AreEqual("first item", list[1]);
-            Assert.AreEqual("third item", list[2]);
+            Assert.AreEqual("second item", list[2]);
         }
 
         // helpers
