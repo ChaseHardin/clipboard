@@ -34,5 +34,19 @@ namespace Clipboard.Business.Tests.ServiceTests
             Assert.AreEqual(2, secondCopy.Count);
             Assert.AreEqual("Second item to dictionary.", secondCopy.First(x => x.Key == 2).Value);
         }
+
+        [TestMethod]
+        public void SelectFromClipboard_HaveMultipleItemsInDictionary_ShouldSetClipboardWithSelectedItem()
+        {
+            var clipboardService = new ClipboardService();
+            var dictionary = clipboardService.ClipboardDirectory;
+            dictionary.Add(1, "first item");
+            dictionary.Add(2, "second item");
+            dictionary.Add(3, "third item");
+
+            Assert.AreEqual(3, dictionary.Count, "PRE-CHECK: Verify 3 items are in dictionary.");
+            Assert.AreEqual("second item",  clipboardService.SelectFromClipboard(2, dictionary));
+            Assert.AreEqual("second item", clipboardService.GetTextFromClipboard());
+        }
     }
 } 

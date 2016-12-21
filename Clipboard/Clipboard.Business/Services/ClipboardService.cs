@@ -16,5 +16,12 @@ namespace Clipboard.Business.Services
             dictionary.Add(dictionary.Count + 1, getTextFromClipboard);
             return dictionary;
         }
+
+        public string SelectFromClipboard(int index, Dictionary<int, string> dictionary)
+        {
+            var selected = dictionary[index];
+            System.Windows.Clipboard.SetText(selected);
+            return selected;
+        }
     }
 }
