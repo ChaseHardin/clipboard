@@ -13,7 +13,8 @@ namespace Clipboard.Business.Services
 
         public List<string> AddTextToList(string getTextFromClipboard)
         {
-            ClipboardDirectory.Add(getTextFromClipboard);
+            ClipboardDirectory.Insert(0, getTextFromClipboard);
+            SetDirectoryMax(3);
             return ClipboardDirectory;
         }
 
@@ -30,6 +31,15 @@ namespace Clipboard.Business.Services
             var current = ClipboardDirectory[selectedIndex];
             ClipboardDirectory.Remove(current);
             ClipboardDirectory.Insert(0, current);
+        }
+
+        private void SetDirectoryMax(int max)
+        {
+            if (ClipboardDirectory.Count > max)
+            {
+                var item = ClipboardDirectory[ClipboardDirectory.Count - 1];
+                ClipboardDirectory.Remove(item);
+            }
         }
     }
 }
