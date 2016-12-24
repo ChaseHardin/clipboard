@@ -12,7 +12,7 @@ namespace Clipboard.Business.Tests.ServiceTests
         [TestInitialize]
         public void Initialize()
         {
-            _clipboardService = new ClipboardService();
+            _clipboardService = new ClipboardService { MaxSizeOfDirectory = 3 };
         }
 
         [TestMethod]

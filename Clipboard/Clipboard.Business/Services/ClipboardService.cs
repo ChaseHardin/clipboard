@@ -5,6 +5,7 @@ namespace Clipboard.Business.Services
     public class ClipboardService
     {
         public List<string> ClipboardDirectory = new List<string>();
+        public int MaxSizeOfDirectory;
 
         public string GetTextFromClipboard()
         {
@@ -14,7 +15,7 @@ namespace Clipboard.Business.Services
         public List<string> AddTextToList(string getTextFromClipboard)
         {
             ClipboardDirectory.Insert(0, getTextFromClipboard);
-            SetDirectoryMax(3);
+            SetDirectoryMax(MaxSizeOfDirectory);
             return ClipboardDirectory;
         }
 
