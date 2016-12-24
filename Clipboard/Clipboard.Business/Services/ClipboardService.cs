@@ -38,8 +38,7 @@ namespace Clipboard.Business.Services
         {
             if (ClipboardDirectory.Count > max)
             {
-                var item = ClipboardDirectory[ClipboardDirectory.Count - 1];
-                ClipboardDirectory.Remove(item);
+                ClipboardDirectory.Remove(ClipboardDirectory[ClipboardDirectory.Count - 1]);
             }
         }
     }
